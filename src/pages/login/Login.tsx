@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -14,11 +13,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import axios from "axios";
 
 const formSchema = z.object({
-	username: z.string().min(1, {
-		message: "Username is required",
-	}),
 	email: z.string().email({
 		message: "Email is invalid",
 	}),
@@ -27,23 +24,48 @@ const formSchema = z.object({
 	}),
 });
 
-function Login() {
+function Register() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			username: "",
 			email: "",
 			password: "",
 		},
 	});
 
-	const onSubmit = (values: z.infer<typeof formSchema>) => {
-		console.log(values);
-		toast({
-			title: "Login",
-			description: "Login successful",
-			variant: "success",
-		});
+	const onSubmit = async (values: z.infer<typeof formSchema>) => {
+		try {
+			const response = await axios.post(
+				"http://localhost:3000/users/login/me",
+				{
+					email: values.email,
+					senha: values.password,
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				},
+			);
+
+			const data = response.data;
+			console.log("Response data:", data);
+
+			localStorage.setItem("token", data);
+
+			toast({
+				title: "Login",
+				description: "Login bem-sucedido",
+				variant: "success",
+			});
+		} catch (error) {
+			console.error("Error during request:", error);
+			toast({
+				title: "Erro",
+				description: "Ocorreu um erro.",
+				variant: "destructive",
+			});
+		}
 	};
 
 	return (
@@ -54,32 +76,12 @@ function Login() {
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 						<FormField
 							control={form.control}
-							name="username"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="text-left">Username</FormLabel>
-									<FormControl>
-										<Input placeholder="Your username" {...field} />
-									</FormControl>
-									<FormDescription>
-										This is your public display name.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
 							name="email"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Email</FormLabel>
+									<FormLabel className="text-left">Email</FormLabel>
 									<FormControl>
-										<Input
-											type="email"
-											placeholder="you@example.com"
-											{...field}
-										/>
+										<Input placeholder="Your email" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -92,18 +94,14 @@ function Login() {
 								<FormItem>
 									<FormLabel>Password</FormLabel>
 									<FormControl>
-										<Input
-											type="password"
-											placeholder="Your password"
-											{...field}
-										/>
+										<Input type="password" placeholder="secret" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<Button className="w-full text-center" type="submit">
-							Login
+							Register
 						</Button>
 					</form>
 				</Form>
@@ -112,4 +110,4 @@ function Login() {
 	);
 }
 
-export default Login;
+export default Register;
