@@ -13,6 +13,7 @@ import Login from "./pages/login/Login.tsx";
 import Register from "./pages/register/Register.tsx";
 import UserHome from "./pages/userHome/userHome.tsx";
 import { jwtDecode } from "jwt-decode";
+import { NavigationMenuDemo } from "./components/user/navigationMenu.tsx";
 
 const ProtectedRoute = () => {
 	const token = localStorage.getItem("token");
@@ -27,7 +28,6 @@ const ProtectedRoute = () => {
 
 		return <Navigate to="/login" />;
 	} catch (error) {
-		console.error("Token decoding failed:", error);
 		return <Navigate to="/login" />;
 	}
 };
@@ -51,11 +51,16 @@ const router = createBrowserRouter([
 	},
 ]);
 
-createRoot(document.getElementById("root")).render(
-	<StrictMode>
-		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-			<RouterProvider router={router} />
-			<Toaster />
-		</ThemeProvider>
-	</StrictMode>,
-);
+const rootElement = document.getElementById("root");
+
+if (rootElement) {
+	createRoot(rootElement).render(
+		<StrictMode>
+			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+				<NavigationMenuDemo />
+				<RouterProvider router={router} />
+				<Toaster />
+			</ThemeProvider>
+		</StrictMode>,
+	);
+}
