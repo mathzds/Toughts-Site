@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
 	email: z.string().email({
@@ -25,6 +26,8 @@ const formSchema = z.object({
 });
 
 function Register() {
+	const navigate = useNavigate();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -49,8 +52,6 @@ function Register() {
 			);
 
 			const data = response.data;
-			console.log("Response data:", data);
-
 			localStorage.setItem("token", data);
 
 			toast({
@@ -58,6 +59,7 @@ function Register() {
 				description: "Login bem-sucedido",
 				variant: "success",
 			});
+			navigate("/home");
 		} catch (error) {
 			console.error("Error during request:", error);
 			toast({
