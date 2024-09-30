@@ -16,9 +16,10 @@ import type { ReactNode } from "react";
 import Root from "./pages/Root.tsx";
 import Home from "./pages/home/Home.tsx";
 import Login from "./pages/login/Login.tsx";
-import Register from "./pages/register/Register.tsx"; // Make sure this import is correct
+import Register from "./pages/register/Register.tsx";
 import UserHome from "./pages/userHome/userHome.tsx";
 import UserAccount from "./pages/userAccount/userAccount.tsx";
+import UserThought from "./pages/userThought/userThought.tsx";
 
 interface ProtectedRouteProps {
 	children: ReactNode;
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
 				element: (
 					<ProtectedRoute>
 						<UserHome />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: "thoughts/:id",
+				element: (
+					<ProtectedRoute>
+						<UserThought />
 					</ProtectedRoute>
 				),
 			},
