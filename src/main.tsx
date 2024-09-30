@@ -10,22 +10,35 @@ import {
 import { ThemeProvider } from "./utils/theme-provider.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import { jwtDecode } from "jwt-decode";
+import type { ReactNode } from "react";
 
-//Pages
+// Pages
 import Root from "./pages/Root.tsx";
 import Home from "./pages/home/Home.tsx";
 import Login from "./pages/login/Login.tsx";
-import Register from "./pages/login/Login.tsx";
+import Register from "./pages/register/Register.tsx"; // Make sure this import is correct
 import UserHome from "./pages/userHome/userHome.tsx";
+import UserAccount from "./pages/userAccount/userAccount.tsx";
+
+interface ProtectedRouteProps {
+	children: ReactNode;
+}
 
 // Middleware
-const ProtectedRoute = () => {
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 	const token = localStorage.getItem("token");
 
 	if (!token) return <Navigate to="/login" />;
 
-	const decoded = jwtDecode(token);
-	return decoded ? <UserHome /> : <Navigate to="/login" />;
+	try {
+		const decoded = jwtDecode(token);
+		if (!decoded) return <Navigate to="/login" />;
+	} catch (error) {
+		console.error("Token decoding failed:", error);
+		return <Navigate to="/login" />;
+	}
+
+	return <>{children}</>;
 };
 
 // Provider
@@ -48,7 +61,19 @@ const router = createBrowserRouter([
 			},
 			{
 				path: "home",
-				element: <ProtectedRoute />,
+				element: (
+					<ProtectedRoute>
+						<UserHome />
+					</ProtectedRoute>
+				),
+			},
+			{
+				path: "user",
+				element: (
+					<ProtectedRoute>
+						<UserAccount />
+					</ProtectedRoute>
+				),
 			},
 		],
 	},

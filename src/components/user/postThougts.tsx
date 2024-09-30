@@ -13,16 +13,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
+
+interface Token {
+	id: number;
+	email: string;
+}
 
 export function DialogTest() {
 	const [open, setOpen] = React.useState(false);
 	const [thought, setThought] = React.useState("");
 
 	const token = localStorage.getItem("token");
-	const userId = token ? jwtDecode(token) : { id: null };
+	let userId: Token | null = null;
+
+	if (token) {
+		try {
+			userId = jwtDecode<Token>(token);
+		} catch (error) {
+			console.error("Failed to decode token:", error);
+		}
+	}
 
 	const createThought = async (values: { username: string; id: number }) => {
+		if (!userId) {
+			toast({
+				title: "Erro",
+				description: "Usuário não autenticado.",
+				variant: "destructive",
+			});
+			return;
+		}
+
 		try {
 			const response = await fetch("http://localhost:3000/toughts", {
 				method: "POST",
@@ -46,8 +68,6 @@ export function DialogTest() {
 				return;
 			}
 
-			const data = await response.json();
-			console.log(data);
 			toast({
 				title: "Registro",
 				description: "Registro bem-sucedido",
@@ -67,7 +87,17 @@ export function DialogTest() {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		createThought({ username: thought, id: userId.id });
+		if (!thought.trim()) {
+			toast({
+				title: "Erro",
+				description: "O pensamento não pode estar vazio.",
+				variant: "destructive",
+			});
+			return;
+		}
+		if (userId) {
+			createThought({ username: thought, id: userId.id });
+		}
 	};
 
 	return (
