@@ -96,17 +96,24 @@ function Register() {
 								<FormItem>
 									<FormLabel>Password</FormLabel>
 									<FormControl>
-										<Input type="password" placeholder="secret" {...field} />
+										<Input type="password" placeholder="password" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<Button className="w-full text-center" type="submit">
-							Register
+							Login
 						</Button>
 					</form>
 				</Form>
+				<button
+					className="flex align-center  text-sm font-bold mt-4"
+					onClick={() => navigate("/register")}
+					type="button"
+				>
+					Don't have an account? Register
+				</button>
 			</div>
 		</div>
 	);

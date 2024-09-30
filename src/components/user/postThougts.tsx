@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 interface Token {
 	id: number;
@@ -69,8 +69,8 @@ export function DialogTest() {
 			}
 
 			toast({
-				title: "Registro",
-				description: "Registro bem-sucedido",
+				title: "Postado",
+				description: "Postado com sucesso",
 				variant: "success",
 			});
 			setOpen(false);

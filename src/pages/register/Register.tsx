@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
 	username: z.string().min(1, {
@@ -28,6 +29,7 @@ const formSchema = z.object({
 });
 
 function Register() {
+	const navigate = useNavigate();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -137,6 +139,13 @@ function Register() {
 						</Button>
 					</form>
 				</Form>
+				<button
+					className="flex align-center  text-sm font-bold mt-4"
+					onClick={() => navigate("/login")}
+					type="button"
+				>
+					Have an account? Login
+				</button>
 			</div>
 		</div>
 	);
