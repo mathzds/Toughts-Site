@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 import type ThoughtInterface from "@/interfaces/thought.interface";
 import { jwtDecode } from "jwt-decode";
 import type Response from "@/interfaces/response.interface";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 function UserThought() {
 	const { id } = useParams<{ id: string }>();
@@ -120,10 +121,12 @@ function UserThought() {
 			</div>
 
 			<div className="mt-4 w-[80%] max-w-[600px]">
-				<h3 className="text-lg font-semibold">Reply</h3>
-
-				<Input
-					className="border p-2 rounded w-full "
+				<Label htmlFor="message" className="flex align-left mb-2">
+					Your reply:
+				</Label>
+				<Textarea
+					className="border p-2 rounded w-full"
+					rows={4}
 					value={replyContent}
 					onChange={(e) => setReplyContent(e.target.value)}
 					placeholder="Write your reply..."
