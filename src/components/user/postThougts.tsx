@@ -1,24 +1,13 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-	Drawer,
-	DrawerClose,
-	DrawerContent,
-	DrawerFooter,
-	DrawerHeader,
-	DrawerTitle,
-	DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { jwtDecode } from "jwt-decode";
+import type Token from "@/interfaces/token.interface";
 
-interface Token {
-	id: number;
-	email: string;
-}
 
 export function DialogTest() {
 	const [open, setOpen] = React.useState(false);
@@ -125,12 +114,8 @@ export function DialogTest() {
 	);
 }
 
-function ProfileForm({
-	className,
-	thought,
-	setThought,
-	onSubmit,
-}: {
+// fix todo later
+function ProfileForm({ className, thought, setThought, onSubmit }: {
 	className?: string;
 	thought: string;
 	setThought: React.Dispatch<React.SetStateAction<string>>;

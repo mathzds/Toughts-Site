@@ -16,7 +16,7 @@ export function NavigationMenuDemo({ containerClassName, activeTabClassName, tab
 	const tabs = [
 		{ title: "Home", href: "/" },
 		{ title: "Pensamentos", href: "/home" },
-		{ title: "Conta", href: "/user" },
+		// { title: "Conta", href: "/user" },
 	];
 
 	useEffect(() => {
