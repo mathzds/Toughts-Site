@@ -2,23 +2,93 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import type ThoughtInterface from "@/interfaces/thought.interface";
+import { jwtDecode } from "jwt-decode";
+import type Response from "@/interfaces/response.interface";
 
 function UserThought() {
 	const { id } = useParams<{ id: string }>();
 	const [thought, setThought] = useState<ThoughtInterface | null>(null);
+	const [responses, setResponses] = useState<Response[]>([]);
+	const [replyContent, setReplyContent] = useState("");
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchThought = async () => {
+			setLoading(true);
+			setError(null);
 			try {
 				const response = await axios.get(`http://localhost:3000/toughts/${id}`);
 				setThought(response.data);
 			} catch (error) {
+				setError("Error fetching thought.");
 				console.error("Error fetching thought:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 
 		fetchThought();
 	}, [id]);
+
+	useEffect(() => {
+		const fetchResponses = async () => {
+			setLoading(true);
+			setError(null);
+			try {
+				const response = await axios.get(
+					`http://localhost:3000/toughts/${id}/responses`,
+				);
+				setResponses(response.data);
+			} catch (error) {
+				setError("Error fetching responses.");
+				console.error("Error fetching responses:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchResponses();
+	}, [id]);
+
+	interface Token {
+		id: number;
+		email: string;
+	}
+
+	const token = localStorage.getItem("token");
+	let decodedUserId: number | null = null;
+
+	if (token) {
+		try {
+			const decodedToken = jwtDecode<Token>(token);
+			decodedUserId = decodedToken.id;
+		} catch (error) {
+			console.error("Failed to decode token:", error);
+		}
+	}
+
+	const reply = async () => {
+		if (!replyContent || !decodedUserId) return;
+
+		try {
+			await axios.post(`http://localhost:3000/toughts/${id}/response`, {
+				userId: decodedUserId,
+				content: replyContent,
+			});
+			setReplyContent("");
+			const response = await axios.get(
+				`http://localhost:3000/toughts/${id}/responses`,
+			);
+			setResponses(response.data);
+		} catch (error) {
+			setError("Error posting reply.");
+			console.error("Error posting reply:", error);
+		}
+	};
+
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p className="text-red-500">{error}</p>;
 
 	return (
 		<div className="flex flex-col items-center justify-center min-h-screen text-center">
@@ -33,6 +103,37 @@ function UserThought() {
 			) : (
 				<p>Loading thought...</p>
 			)}
+
+			<div className="mt-6 w-[80%] max-w-[600px]">
+				<h3 className="text-lg font-semibold">Responses</h3>
+				{responses.length > 0 ? (
+					responses.map((response) => (
+						<div key={response.id} className="border p-2 rounded mt-2">
+							<p>{response.content}</p>
+						</div>
+					))
+				) : (
+					<p>No responses yet.</p>
+				)}
+			</div>
+
+			<div className="mt-4 w-[80%] max-w-[600px]">
+				<h3 className="text-lg font-semibold">Reply to this Thought</h3>
+				<textarea
+					className="border p-2 rounded w-full"
+					rows={3}
+					value={replyContent}
+					onChange={(e) => setReplyContent(e.target.value)}
+					placeholder="Write your reply..."
+				/>
+				<button
+					onClick={reply}
+					className="mt-2 bg-blue-500 text-white py-1 px-4 rounded"
+					type="button"
+				>
+					Reply
+				</button>
+			</div>
 		</div>
 	);
 }

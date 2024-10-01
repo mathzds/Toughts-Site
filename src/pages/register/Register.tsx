@@ -47,7 +47,7 @@ function Register() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					name: values.username,
+					username: values.username,
 					email: values.email,
 					senha: values.password,
 				}),
