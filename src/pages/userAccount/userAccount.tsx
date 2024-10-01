@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import type UserInterface from "@/interfaces/user.interface";
 import axios from "axios";
+import { UserProfile } from "@/components/user/userProfile";
 
 function UserAccount() {
 	const [user, setUser] = useState<UserInterface | null>(null);
@@ -42,6 +43,7 @@ function UserAccount() {
 					<p>Name: {user.name || user.username || "N/A"}</p>
 					<p>Email: {user.email || "N/A"}</p>
 					<p>Age: {user.id || "N/A"}</p>
+					<UserProfile/>
 				</div>
 			) : (
 				<p>No user data available.</p>
