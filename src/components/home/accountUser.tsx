@@ -1,20 +1,15 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { toast } from "@/hooks/use-toast";
+
+import axios from "axios";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
 	email: z.string().email({ message: "Email inválido" }),
@@ -28,6 +23,7 @@ const registerSchema = z.object({
 });
 
 export function CaraEuNaoSei() {
+	const navigate = useNavigate();
 	const loginForm = useForm({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -54,7 +50,6 @@ export function CaraEuNaoSei() {
 					senha: values.password,
 				},
 			);
-			console.log(response);
 			if (response) {
 				localStorage.setItem("token", response.data);
 				toast({
@@ -62,6 +57,7 @@ export function CaraEuNaoSei() {
 					description: "Login bem-sucedido",
 					variant: "success",
 				});
+				navigate("/home");
 			}
 		} catch (error) {
 			console.error("Erro durante o login:", error);
@@ -107,7 +103,6 @@ export function CaraEuNaoSei() {
 				<Card>
 					<CardHeader>
 						<CardTitle>Login</CardTitle>
-						<CardDescription>Entre na sua conta</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-2">
 						<form
@@ -135,16 +130,12 @@ export function CaraEuNaoSei() {
 							</Button>
 						</form>
 					</CardContent>
-					<CardFooter>
-						<Button variant="outline">Esqueceu a senha?</Button>
-					</CardFooter>
 				</Card>
 			</TabsContent>
 			<TabsContent value="register">
 				<Card>
 					<CardHeader>
 						<CardTitle>Registrar</CardTitle>
-						<CardDescription>Crie uma nova conta</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-2">
 						<form
@@ -176,9 +167,6 @@ export function CaraEuNaoSei() {
 							</Button>
 						</form>
 					</CardContent>
-					<CardFooter>
-						<Button variant="outline">Já tem uma conta?</Button>
-					</CardFooter>
 				</Card>
 			</TabsContent>
 		</Tabs>

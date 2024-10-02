@@ -9,16 +9,16 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
 	useEffect(() => {
 		if (!token) {
-			navigate("/login");
+			navigate("/account");
 		} else {
 			try {
 				const decoded = jwtDecode(token);
 				if (!decoded) {
-					navigate("/login");
+					navigate("/account");
 				}
 			} catch (error) {
 				console.error("Token decoding failed:", error);
-				navigate("/login");
+				navigate("/account");
 			}
 		}
 	}, [token, navigate]);

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 import type ThoughtInterface from "@/interfaces/thought.interface";
-import { jwtDecode } from "jwt-decode";
 import type Response from "@/interfaces/response.interface";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 function UserThought() {
 	const { id } = useParams<{ id: string }>();
@@ -100,7 +101,7 @@ function UserThought() {
 				<div className="border p-4 rounded shadow w-[80%] max-w-[600px]">
 					<h2 className="text-lg font-semibold">{thought.title}</h2>
 					<p className="text-sm text-gray-500">
-						By: {thought.user.name}#{thought.user.id}
+						By: {thought.user.username}#{thought.user.id}
 					</p>
 				</div>
 			) : (
@@ -112,7 +113,10 @@ function UserThought() {
 				{responses.length > 0 ? (
 					responses.map((response) => (
 						<div key={response.id} className="border p-2 rounded mt-2">
-							<p>{response.content}</p>
+							<ul>{response.content}</ul>
+							<p className="text-sm text-gray-500">
+								By: {response.user.username}#{response.user.id}
+							</p>
 						</div>
 					))
 				) : (

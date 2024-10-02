@@ -1,9 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
-import axios from "axios";
 import type ThoughtInterface from "@/interfaces/thought.interface";
 import { DialogTest } from "@/components/user/postThougts";
 import { Button } from "@/components/ui/button";
+
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function UserHome() {
 	const navigate = useNavigate();

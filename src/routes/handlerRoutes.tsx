@@ -3,11 +3,10 @@ import ProtectedRoute from "@/middleware/authGuard";
 
 import Root from "@/pages/Root.tsx";
 import Home from "@/pages/home/Home";
-import Login from "@/pages/login/Login.tsx";
-import Register from "@/pages/register/Register.tsx";
 import UserAccount from "@/pages/userAccount/userAccount";
 import UserHome from "@/pages/userHome/userHome";
 import UserThought from "@/pages/userThought/userThought";
+import LoginOrRegister from "@/pages/loginOrRegister/LoginOrRegister";
 
 const router = createBrowserRouter([
 	{
@@ -19,12 +18,8 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: "login",
-				element: <Login />,
-			},
-			{
-				path: "register",
-				element: <Register />,
+				path: "account",
+				element: <LoginOrRegister />,
 			},
 			{
 				path: "home",
