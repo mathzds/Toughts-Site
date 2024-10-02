@@ -4,6 +4,7 @@ import { UserProfile } from "@/components/user/userProfile";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import Config from "@/config/config.app";
 
 function UserAccount() {
 	const [user, setUser] = useState<UserInterface | null>(null);
@@ -17,7 +18,7 @@ function UserAccount() {
 					const decoded = jwtDecode<UserInterface>(token);
 
 					const response = await axios.get(
-						`http://localhost:3000/users/${decoded.id}`,
+						`${Config.apiUrl}/users/${decoded.id}`,
 					);
 					setUser(response.data);
 					console.log(response.data);

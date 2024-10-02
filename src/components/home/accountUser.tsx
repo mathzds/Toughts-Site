@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
+import Config from "@/config/config.app";
 
 import axios from "axios";
 import { z } from "zod";
@@ -43,13 +44,10 @@ export function CaraEuNaoSei() {
 
 	const handleLogin = async (values: z.infer<typeof loginSchema>) => {
 		try {
-			const response = await axios.post(
-				"http://localhost:3000/users/login/me",
-				{
-					email: values.email,
-					senha: values.password,
-				},
-			);
+			const response = await axios.post(`${Config.apiUrl}/users/login/me`, {
+				email: values.email,
+				senha: values.password,
+			});
 			if (response) {
 				localStorage.setItem("token", response.data);
 				toast({
@@ -71,7 +69,7 @@ export function CaraEuNaoSei() {
 
 	const handleRegister = async (values: z.infer<typeof registerSchema>) => {
 		try {
-			const response = await axios.post("http://localhost:3000/users", {
+			const response = await axios.post(`${Config.apiUrl}/users`, {
 				username: values.username,
 				email: values.email,
 				senha: values.password,

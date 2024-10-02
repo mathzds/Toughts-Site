@@ -1,5 +1,5 @@
 const Config = {
-	apiUrl: String(process.env.API_URL),
+	apiUrl: "http://localhost:3000",
 };
 
 export default Config;

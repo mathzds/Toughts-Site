@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import Config from "@/config/config.app";
 
 function UserThought() {
 	const { id } = useParams<{ id: string }>();
@@ -22,7 +23,7 @@ function UserThought() {
 			setLoading(true);
 			setError(null);
 			try {
-				const response = await axios.get(`http://localhost:3000/toughts/${id}`);
+				const response = await axios.get(`${Config.apiUrl}/toughts/${id}`);
 				setThought(response.data);
 			} catch (error) {
 				setError("Error fetching thought.");
@@ -41,7 +42,7 @@ function UserThought() {
 			setError(null);
 			try {
 				const response = await axios.get(
-					`http://localhost:3000/toughts/${id}/responses`,
+					`${Config.apiUrl}/toughts/${id}/responses`,
 				);
 				setResponses(response.data);
 			} catch (error) {
@@ -76,13 +77,13 @@ function UserThought() {
 		if (!replyContent || !decodedUserId) return;
 
 		try {
-			await axios.post(`http://localhost:3000/toughts/${id}/response`, {
+			await axios.post(`${Config.apiUrl}/toughts/${id}/response`, {
 				userId: decodedUserId,
 				content: replyContent,
 			});
 			setReplyContent("");
 			const response = await axios.get(
-				`http://localhost:3000/toughts/${id}/responses`,
+				`${Config.apiUrl}/toughts/${id}/responses`,
 			);
 			setResponses(response.data);
 		} catch (error) {

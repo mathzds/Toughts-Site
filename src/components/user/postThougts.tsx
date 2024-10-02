@@ -1,13 +1,22 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
+import type Token from "@/interfaces/token.interface";
 import { Button } from "@/components/ui/button";
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { jwtDecode } from "jwt-decode";
-import type Token from "@/interfaces/token.interface";
+import { cn } from "@/lib/utils";
 
+import * as React from "react";
+import { jwtDecode } from "jwt-decode";
+import Config from "@/config/config.app";
 
 export function DialogTest() {
 	const [open, setOpen] = React.useState(false);
@@ -35,7 +44,7 @@ export function DialogTest() {
 		}
 
 		try {
-			const response = await fetch("http://localhost:3000/toughts", {
+			const response = await fetch(`${Config.apiUrl}/toughts`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -115,7 +124,12 @@ export function DialogTest() {
 }
 
 // fix todo later
-function ProfileForm({ className, thought, setThought, onSubmit }: {
+function ProfileForm({
+	className,
+	thought,
+	setThought,
+	onSubmit,
+}: {
 	className?: string;
 	thought: string;
 	setThought: React.Dispatch<React.SetStateAction<string>>;

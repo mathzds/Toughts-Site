@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Config from "@/config/config.app";
 
 function UserHome() {
 	const navigate = useNavigate();
@@ -12,7 +13,7 @@ function UserHome() {
 
 	const handlerThoughts = useCallback(async () => {
 		try {
-			const response = await axios.get("http://localhost:3000/toughts");
+			const response = await axios.get(`${Config.apiUrl}/toughts`);
 			setThoughts(response.data);
 		} catch (error) {
 			console.log(error);

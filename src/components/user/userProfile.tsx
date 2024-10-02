@@ -1,9 +1,5 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -14,11 +10,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Config from "@/config/config.app";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import axios from "axios";
+
 import { jwtDecode } from "jwt-decode";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { z } from "zod";
 
 const formSchema = z.object({
 	username: z.string().min(4, {
@@ -59,13 +60,13 @@ export function UserProfile() {
 		}
 
 		try {
-			const { id } = jwtDecode<{ id: string }>(token); // Ensure to define the shape of your decoded token
+			const { id } = jwtDecode<{ id: string }>(token);
 			const response = await axios.put(
-				`http://localhost:3000/users/${id}`,
+				`${Config.apiUrl}/users/${id}`,
 				{
 					username: values.username,
 					email: values.email,
-					senha: values.password, // Assuming 'senha' is the correct field name for password
+					senha: values.password,
 				},
 				{
 					headers: {
@@ -79,7 +80,7 @@ export function UserProfile() {
 					description: "Dados atualizados com sucesso.",
 					variant: "success",
 				});
-				reset(); // Clear the form fields after a successful submission
+				reset();
 			} else {
 				toast({
 					title: "Erro",
